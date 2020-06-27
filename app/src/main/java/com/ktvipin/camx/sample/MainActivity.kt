@@ -17,16 +17,49 @@
 
 package com.ktvipin.camx.sample
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import com.ktvipin.camx.CamX
+import com.ktvipin.camx.utils.isVideo
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         btnOpenCamera.setOnClickListener { CamX.openCamera(this) }
+
+        val mediaController = MediaController(this)
+        videoView.setMediaController(mediaController)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CamX.REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                CamX.getMedia(data)?.let {
+                    if (it.isVideo) {
+                        videoView.setVideoURI(it)
+                        videoView.seekTo(1)
+                        videoView.visibility = VISIBLE
+                        photoView.visibility = GONE
+                    } else {
+                        photoView.setImageURI(it)
+                        photoView.visibility = VISIBLE
+                        videoView.visibility = GONE
+                    }
+                }
+            } else {
+                photoView.visibility = GONE
+                videoView.visibility = GONE
+            }
+        }
     }
 }
