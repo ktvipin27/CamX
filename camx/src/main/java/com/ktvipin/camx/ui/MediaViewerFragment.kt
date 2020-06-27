@@ -17,7 +17,10 @@
 
 package com.ktvipin.camx.ui
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -25,8 +28,9 @@ import android.widget.MediaController
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.ktvipin.camx.CamX
 import com.ktvipin.camx.R
-import com.ktvipin.camx.utils.Constants.VIDEO_FILE_EXTENSION
+import com.ktvipin.camx.utils.isVideo
 import kotlinx.android.synthetic.main.fragment_media_viewer.*
 
 /**
@@ -42,7 +46,7 @@ class MediaViewerFragment : Fragment(R.layout.fragment_media_viewer) {
         btnBack.setOnClickListener { findNavController().popBackStack() }
 
         val mediaUri = args.mediaUri
-        if (mediaUri.path?.endsWith(VIDEO_FILE_EXTENSION, true) == true) {
+        if (mediaUri.isVideo) {
             val mediaController = MediaController(requireContext())
             videoView.setMediaController(mediaController)
             videoView.setVideoURI(mediaUri)
@@ -54,5 +58,18 @@ class MediaViewerFragment : Fragment(R.layout.fragment_media_viewer) {
             photoView.visibility = VISIBLE
             videoView.visibility = GONE
         }
+
+        btnDone.setOnClickListener {
+            with(requireActivity()) {
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra(CamX.EXTRA_MEDIA, mediaUri)
+                })
+                finish()
+            }
+        }
+
+        Handler().postDelayed({
+            btnDone.show()
+        }, 300)
     }
 }

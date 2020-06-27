@@ -19,6 +19,7 @@ package com.ktvipin.camx.utils
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.net.Uri
 import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
@@ -90,5 +91,8 @@ fun DisplayMetrics.aspectRatio(): Int {
     }
     return androidx.camera.core.AspectRatio.RATIO_16_9
 }
+
+val Uri?.isVideo: Boolean
+    get() = this?.path?.endsWith(Constants.VIDEO_FILE_EXTENSION, true) ?: false
 
 

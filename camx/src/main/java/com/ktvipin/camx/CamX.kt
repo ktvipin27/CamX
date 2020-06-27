@@ -17,15 +17,25 @@
 
 package com.ktvipin.camx
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import com.ktvipin.camx.ui.CameraActivity
 
 /**
  * Created by Vipin KT on 27/06/20
  */
 object CamX {
-    fun openCamera(context: Context) = with(context) {
-        startActivity(Intent(this, CameraActivity::class.java))
+    const val REQUEST_CODE = 54321
+    internal const val EXTRA_MEDIA = "media"
+
+    fun openCamera(activity: Activity) = with(activity) {
+        startActivityForResult(
+            Intent(
+                this, CameraActivity::class.java
+            ), REQUEST_CODE
+        )
     }
+
+    fun getMedia(data: Intent?): Uri? = data?.extras?.get(EXTRA_MEDIA) as Uri?
 }
