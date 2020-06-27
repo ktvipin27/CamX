@@ -15,13 +15,25 @@
   ~
   -->
 
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:name="androidx.navigation.fragment.NavHostFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:defaultNavHost="true"
-    app:navGraph="@navigation/nav_graph"
-    tools:context=".ui.CameraActivity" />
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cameraFragment">
+
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.ktvipin.camx.ui.PermissionFragment"
+        android:label="PermissionFragment" />
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.ktvipin.camx.ui.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera">
+        <action
+            android:id="@+id/action_cameraFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment" />
+    </fragment>
+
+</navigation>

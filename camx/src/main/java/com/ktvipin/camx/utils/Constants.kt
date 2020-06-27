@@ -20,8 +20,13 @@ package com.ktvipin.camx.utils
 /**
  * Created by Vipin KT on 27/06/20
  */
-object Config {
+object Constants {
     const val LONG_PRESS_DELAY_MILLIS = 1000L
     const val SCALE_UP = 1.2f
     const val SCALE_DOWN = 1.0f
+    const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    const val RATIO_4_3_VALUE = 4.0 / 3.0
+    const val RATIO_16_9_VALUE = 16.0 / 9.0
+    const val IMAGE_FILE_EXTENSION = ".jpg"
+    const val VIDEO_FILE_EXTENSION = ".mp4"
 }

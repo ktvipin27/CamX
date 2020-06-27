@@ -34,9 +34,9 @@ import androidx.core.view.setPadding
 import com.ktvipin.camx.R
 import com.ktvipin.camx.utils.AnimationUtils.startRotateAnimation
 import com.ktvipin.camx.utils.AnimationUtils.startScaleAnimation
-import com.ktvipin.camx.utils.Config.LONG_PRESS_DELAY_MILLIS
-import com.ktvipin.camx.utils.Config.SCALE_DOWN
-import com.ktvipin.camx.utils.Config.SCALE_UP
+import com.ktvipin.camx.utils.Constants.LONG_PRESS_DELAY_MILLIS
+import com.ktvipin.camx.utils.Constants.SCALE_DOWN
+import com.ktvipin.camx.utils.Constants.SCALE_UP
 import com.ktvipin.camx.utils.px
 
 

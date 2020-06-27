@@ -26,6 +26,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ktvipin.camx.utils.toast
 
+/**
+ * Created by Vipin KT on 27/06/20
+ */
 class PermissionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

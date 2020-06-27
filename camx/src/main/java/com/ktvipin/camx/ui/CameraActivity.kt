@@ -21,6 +21,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ktvipin.camx.R
 
+/**
+ * Created by Vipin KT on 27/06/20
+ */
 class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
