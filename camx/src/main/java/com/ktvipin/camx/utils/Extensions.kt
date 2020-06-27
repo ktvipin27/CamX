@@ -18,6 +18,8 @@
 package com.ktvipin.camx.utils
 
 import android.content.res.Resources
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import java.util.concurrent.TimeUnit
 
 /**
@@ -38,6 +40,16 @@ fun Long.toDuration(): String {
             )
         )
     )
+}
+
+fun Fragment.toast(message: String) {
+    requireActivity().runOnUiThread {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_LONG
+        ).show()
+    }
 }
 
 
