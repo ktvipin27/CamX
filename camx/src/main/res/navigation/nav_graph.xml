@@ -27,6 +27,16 @@
         android:label="PermissionFragment" />
 
     <fragment
+        android:id="@+id/mediaViewerFragment"
+        android:name="com.ktvipin.camx.ui.MediaViewerFragment"
+        android:label="fragment_media_viewer"
+        tools:layout="@layout/fragment_media_viewer">
+        <argument
+            android:name="mediaUri"
+            app:argType="android.net.Uri" />
+    </fragment>
+
+    <fragment
         android:id="@+id/cameraFragment"
         android:name="com.ktvipin.camx.ui.CameraFragment"
         android:label="fragment_camera"
@@ -34,6 +44,9 @@
         <action
             android:id="@+id/action_cameraFragment_to_permissionFragment"
             app:destination="@id/permissionFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_mediaViewerFragment"
+            app:destination="@id/mediaViewerFragment" />
     </fragment>
 
 </navigation>

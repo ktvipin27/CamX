@@ -49,6 +49,13 @@ class CameraFragment : Fragment(R.layout.fragment_camera), ControlView.Listener 
         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
             val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
             FileUtils.scanFile(requireContext(), savedUri)
+
+            findNavController()
+                .navigate(
+                    CameraFragmentDirections.actionCameraFragmentToMediaViewerFragment(
+                        savedUri
+                    )
+                )
         }
 
         override fun onError(exc: ImageCaptureException) {
@@ -61,6 +68,13 @@ class CameraFragment : Fragment(R.layout.fragment_camera), ControlView.Listener 
         override fun onVideoSaved(file: File) {
             val savedUri = Uri.fromFile(file)
             FileUtils.scanFile(requireContext(), savedUri)
+
+            findNavController()
+                .navigate(
+                    CameraFragmentDirections.actionCameraFragmentToMediaViewerFragment(
+                        savedUri
+                    )
+                )
         }
 
         override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
