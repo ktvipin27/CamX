@@ -24,6 +24,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
+import com.ktvipin.CameraOptions
 import com.ktvipin.camx.CamX
 import com.ktvipin.camx.utils.isVideo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,7 +35,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnOpenCamera.setOnClickListener { CamX.openCamera(this) }
+        btnOpenCamera.setOnClickListener {
+            CamX.openCamera(this) {
+                mirrorImage = true
+                supportFrontCamera = true
+                flashEnabled = false
+                captureMode = CameraOptions.CaptureMode.IMAGE
+            }
+        }
 
         val mediaController = MediaController(this)
         videoView.setMediaController(mediaController)

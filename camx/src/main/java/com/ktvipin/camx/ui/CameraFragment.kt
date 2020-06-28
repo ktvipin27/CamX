@@ -28,6 +28,8 @@ import androidx.camera.core.VideoCapture
 import androidx.camera.view.CameraView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.ktvipin.CameraOptions
 import com.ktvipin.camx.R
 import com.ktvipin.camx.controls.ControlView
 import com.ktvipin.camx.utils.*
@@ -40,6 +42,10 @@ import java.util.concurrent.Executors
  * Created by Vipin KT on 27/06/20
  */
 class CameraFragment : Fragment(R.layout.fragment_camera), ControlView.Listener {
+
+    private val args: CameraFragmentArgs by navArgs()
+    private val options by lazy { args.options }
+
     private val outputDirectory: File by lazy { FileUtils.getOutputDirectory(requireContext()) }
     private lateinit var cameraExecutor: ExecutorService
 
@@ -86,10 +92,17 @@ class CameraFragment : Fragment(R.layout.fragment_camera), ControlView.Listener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
-        cameraView.bindToLifecycle(viewLifecycleOwner)
-        cameraView.captureMode = CameraView.CaptureMode.MIXED
-        controlView.setListener(this)
-        controlView.cameraToggleVisibility = cameraView.hasBackCamera && cameraView.hasFrontCamera
+        with(cameraView) {
+            bindToLifecycle(viewLifecycleOwner)
+            captureMode = CameraView.CaptureMode.MIXED
+        }
+        with(controlView) {
+            setListener(this@CameraFragment)
+            cameraToggleVisibility =
+                options.supportFrontCamera && cameraView.hasBackCamera && cameraView.hasFrontCamera
+            flashVisibility = options.flashEnabled
+            videoEnabled = options.captureMode != CameraOptions.CaptureMode.IMAGE
+        }
     }
 
     override fun onResume() {
@@ -120,7 +133,8 @@ class CameraFragment : Fragment(R.layout.fragment_camera), ControlView.Listener 
         val photoFile = FileUtils.getFile(outputDirectory, Constants.IMAGE_FILE_EXTENSION)
         val metadata = ImageCapture.Metadata().apply {
             // Mirror image when using the front camera
-            isReversedHorizontal = cameraView.cameraLensFacing == CameraSelector.LENS_FACING_FRONT
+            isReversedHorizontal =
+                options.mirrorImage && cameraView.cameraLensFacing == CameraSelector.LENS_FACING_FRONT
         }
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(photoFile)

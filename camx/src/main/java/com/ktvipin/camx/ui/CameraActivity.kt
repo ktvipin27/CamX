@@ -20,12 +20,14 @@ package com.ktvipin.camx.ui
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
 import com.ktvipin.camx.R
 
 /**
  * Created by Vipin KT on 27/06/20
  */
 class CameraActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar)
         super.onCreate(savedInstanceState)
@@ -34,5 +36,9 @@ class CameraActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
         )
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let {
+            (it as NavHostFragment).navController.setGraph(R.navigation.nav_graph, intent?.extras)
+        }
+
     }
 }

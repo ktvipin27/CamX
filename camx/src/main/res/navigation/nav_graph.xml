@@ -41,6 +41,9 @@
         android:name="com.ktvipin.camx.ui.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera">
+        <argument
+            android:name="options"
+            app:argType="com.ktvipin.CameraOptions" />
         <action
             android:id="@+id/action_cameraFragment_to_permissionFragment"
             app:destination="@id/permissionFragment" />

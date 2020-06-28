@@ -40,7 +40,7 @@ object AnimationUtils {
         val scaleDownY = ObjectAnimator.ofFloat(
             this, "scaleY", scaleY
         )
-        scaleDownX.duration = 500
+        scaleDownX.duration = 300
         val scaleDown2 = AnimatorSet()
         scaleDown2.play(scaleDownX).with(scaleDownY)
         scaleDown2.start()

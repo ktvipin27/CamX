@@ -59,6 +59,7 @@ class ControlView : LinearLayout {
         FLASH_MODE_OFF
     }
 
+    private var isVideoEnabled: Boolean = true
     private var isLongPressed: Boolean = false
     private var flashMode: FlashMode = FlashMode.FLASH_MODE_OFF
     private var listener: Listener? = null
@@ -118,6 +119,12 @@ class ControlView : LinearLayout {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
         text = "Hold for Video, tap for Photo"
     }.also { addView(it) }
+
+    var videoEnabled: Boolean = isVideoEnabled
+        set(value) {
+            field = value
+            isVideoEnabled = value
+        }
 
     var flashVisibility: Boolean = true
         set(value) {
@@ -183,50 +190,53 @@ class ControlView : LinearLayout {
             timerView.startTimer()
             listener?.startVideoCapturing()
         }
-        ivCapture.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    mHandler.postDelayed(
-                        mLongPressed,
-                        LONG_PRESS_DELAY_MILLIS
-                    )
-                    ivCapture.setImageResource(R.drawable.ic_circle_red_white_70)
-                    v.startScaleAnimation(
-                        SCALE_UP,
-                        SCALE_UP
-                    )
-                    initialTouchX = event.rawX
-                    initialTouchY = event.rawY
-                    return@setOnTouchListener true
-                }
-                MotionEvent.ACTION_UP -> {
-                    timerView.stopTimer()
-                    mHandler.removeCallbacks(mLongPressed)
-                    v.startScaleAnimation(SCALE_DOWN, SCALE_DOWN) {
-                        ivCapture.setImageResource(R.drawable.ic_circle_line_white_70)
+        if (!isVideoEnabled)
+            ivCapture.setOnClickListener { listener?.capturePhoto() }
+        else
+            ivCapture.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        mHandler.postDelayed(
+                            mLongPressed,
+                            LONG_PRESS_DELAY_MILLIS
+                        )
+                        ivCapture.setImageResource(R.drawable.ic_circle_red_white_70)
+                        v.startScaleAnimation(
+                            SCALE_UP,
+                            SCALE_UP
+                        )
+                        initialTouchX = event.rawX
+                        initialTouchY = event.rawY
+                        return@setOnTouchListener true
                     }
-                    val xDiff = initialTouchX - event.rawX
-                    val yDiff = initialTouchY - event.rawY
-                    if ((kotlin.math.abs(xDiff) < 5) && (kotlin.math.abs(yDiff) < 5)) {
-                        if (isLongPressed) {
+                    MotionEvent.ACTION_UP -> {
+                        timerView.stopTimer()
+                        mHandler.removeCallbacks(mLongPressed)
+                        v.startScaleAnimation(SCALE_DOWN, SCALE_DOWN) {
+                            ivCapture.setImageResource(R.drawable.ic_circle_line_white_70)
+                        }
+                        val xDiff = initialTouchX - event.rawX
+                        val yDiff = initialTouchY - event.rawY
+                        if ((kotlin.math.abs(xDiff) < 5) && (kotlin.math.abs(yDiff) < 5)) {
+                            if (isLongPressed) {
+                                isLongPressed = false
+                                ivCapture.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                                listener?.stopVideoCapturing()
+                            } else {
+                                listener?.capturePhoto()
+                            }
+                        } else {
                             isLongPressed = false
                             ivCapture.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                             listener?.stopVideoCapturing()
-                        } else {
-                            listener?.capturePhoto()
                         }
-                    } else {
-                        isLongPressed = false
-                        ivCapture.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        listener?.stopVideoCapturing()
+                        v.performClick()
+                        return@setOnTouchListener true
                     }
-                    v.performClick()
-                    return@setOnTouchListener true
-                }
-                else -> {
-                    return@setOnTouchListener false
+                    else -> {
+                        return@setOnTouchListener false
+                    }
                 }
             }
-        }
     }
 }

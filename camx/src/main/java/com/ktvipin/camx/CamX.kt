@@ -20,6 +20,7 @@ package com.ktvipin.camx
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import com.ktvipin.CameraOptions
 import com.ktvipin.camx.ui.CameraActivity
 
 /**
@@ -28,13 +29,20 @@ import com.ktvipin.camx.ui.CameraActivity
 object CamX {
     const val REQUEST_CODE = 54321
     internal const val EXTRA_MEDIA = "media"
+    internal const val EXTRA_OPTIONS = "options"
 
-    fun openCamera(activity: Activity) = with(activity) {
+    fun openCamera(activity: Activity, options: CameraOptions = CameraOptions()) = with(activity) {
         startActivityForResult(
-            Intent(
-                this, CameraActivity::class.java
-            ), REQUEST_CODE
+            Intent(this, CameraActivity::class.java).apply {
+                putExtra(EXTRA_OPTIONS, options)
+            }, REQUEST_CODE
         )
+    }
+
+    fun openCamera(activity: Activity, options: CameraOptions.() -> Unit) {
+        val o = CameraOptions()
+        options(o)
+        openCamera(activity, o)
     }
 
     fun getMedia(data: Intent?): Uri? = data?.extras?.get(EXTRA_MEDIA) as Uri?
